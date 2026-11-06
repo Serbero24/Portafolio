@@ -20,5 +20,5 @@ export const site = {
   // 1. Crea una cuenta en https://formspree.io  2. Crea un formulario
   // 3. Copia el ID que te dan (ej. "xyzabcd") y pégalo aquí.
   // Si lo dejas vacío, el botón abrirá el correo del visitante con el mensaje listo.
-  formspreeId: '',
+  formspreeId: 'myeevalv',
 }
