@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+/* ===== Colores del portafolio: cambia --color-accent para otro tono ===== */
+@theme {
+  --color-bg: #050b14;
+  --color-surface: #0b1624;
+  --color-line: #16263a;
+  --color-ink: #e8eef5;
+  --color-muted: #8a9bb0;
+  --color-accent: #10d9a0;      /* verde esmeralda */
+  --color-accent-soft: #0b6b52;
+  --font-display: "Chakra Petch", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+body { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-sans); }
+::selection { background: var(--color-accent); color: var(--color-bg); }
+
+/* Esquinas cortadas estilo HUD */
+.clip-hud { clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px); }
+
+/* Esquinas tipo visor */
+.brackets { position: relative; }
+.brackets::before, .brackets::after {
+  content: ""; position: absolute; width: 22px; height: 22px; border: 2px solid var(--color-accent);
+}
+.brackets::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.brackets::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+/* Texto neón */
+.neon { text-shadow: 0 0 12px rgba(16, 217, 160, 0.55), 0 0 40px rgba(16, 217, 160, 0.25); }
+
+/* Suelo de cuadrícula en perspectiva */
+.grid-floor {
+  background-image:
+    linear-gradient(rgba(16, 217, 160, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 217, 160, 0.18) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(500px) rotateX(62deg);
+  transform-origin: center top;
+  mask-image: linear-gradient(to bottom, transparent, black 30%, transparent 95%);
+  animation: grid-move 4s linear infinite;
+}
+@keyframes grid-move { to { background-position: 0 60px; } }
+
+/* Órbitas del hero */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin-rev { to { transform: rotate(-360deg); } }
+.orbit { animation: spin var(--speed, 30s) linear infinite; }
+.orbit > .planet-pos > .planet { animation: spin-rev var(--speed, 30s) linear infinite; }
+.spin-slow { animation: spin 18s linear infinite; }
+.spin-slow-rev { animation: spin-rev 26s linear infinite; }
+
+/* Línea de escaneo sobre la foto */
+@keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+.scanline { animation: scan 3s ease-in-out infinite alternate; }
+
+/* Glitch en el título */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+  content: attr(data-text); position: absolute; inset: 0; opacity: 0.8; pointer-events: none;
+}
+.glitch::before { color: #2de2ff; animation: glitch-a 3.5s infinite steps(1); }
+.glitch::after { color: #10d9a0; animation: glitch-b 3.5s infinite steps(1); }
+@keyframes glitch-a {
+  0%, 88%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  90% { clip-path: inset(10% 0 60% 0); transform: translate(-4px, 0); }
+  93% { clip-path: inset(55% 0 20% 0); transform: translate(4px, 0); }
+  96% { clip-path: inset(30% 0 45% 0); transform: translate(-2px, 0); }
+}
+@keyframes glitch-b {
+  0%, 88%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  91% { clip-path: inset(65% 0 10% 0); transform: translate(4px, 0); }
+  94% { clip-path: inset(15% 0 70% 0); transform: translate(-4px, 0); }
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+.caret { animation: blink 1s step-end infinite; }
+@keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,217,160,0.6); } 50% { box-shadow: 0 0 0 6px rgba(16,217,160,0); } }
+.pulse-dot { animation: pulse-dot 2s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit, .orbit .planet, .caret, .spin-slow, .spin-slow-rev, .scanline, .grid-floor,
+  .glitch::before, .glitch::after, .pulse-dot { animation: none; }
+}
+
+/* Entradas de tarjetas y ventanas */
+@keyframes pop { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+
+/* ===== Intro "construcción" ===== */
+.ib-box {
+  border: 1px solid rgba(45, 226, 255, 0.7);
+  background: rgba(45, 226, 255, 0.04);
+  opacity: 0;
+  transform: scale(0.96);
+  animation: ib-in 0.45s ease-out forwards;
+  animation-delay: var(--d);
+  background-image:
+    linear-gradient(#2de2ff, #2de2ff), linear-gradient(#2de2ff, #2de2ff),
+    linear-gradient(#2de2ff, #2de2ff), linear-gradient(#2de2ff, #2de2ff);
+  background-size: 7px 7px;
+  background-repeat: no-repeat;
+  background-position: -3px -3px, calc(100% + 3px) -3px, -3px calc(100% + 3px), calc(100% + 3px) calc(100% + 3px);
+}
+.ib-round { border-radius: 9999px; }
+.ib-tag {
+  position: absolute; left: -1px; top: -20px;
+  background: #2de2ff; color: #04140f;
+  font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; white-space: nowrap;
+}
+.ib-text {
+  padding: 10px 14px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(28px, 5vw, 64px); line-height: 0.95; color: var(--color-ink);
+  opacity: 0; animation: ib-fade 0.5s ease-out 1.1s forwards;
+}
+.ib-bar { width: 0; animation: ib-bar 2.2s ease-in-out forwards; }
+.ib-count::after { content: "0%"; animation: ib-count 2.2s steps(1) forwards; }
+@keyframes ib-in { to { opacity: 1; transform: none; } }
+@keyframes ib-fade { to { opacity: 1; } }
+@keyframes ib-bar { to { width: 100%; } }
+@keyframes ib-count {
+  0% { content: "0%"; } 20% { content: "18%"; } 40% { content: "41%"; }
+  60% { content: "67%"; } 80% { content: "88%"; } 100% { content: "100%"; }
+}
+
+/* ===== Selección estilo editor de diseño al pasar el mouse ===== */
+@media (hover: hover) {
+  .selectable { position: relative; }
+  .selectable::before,
+  .selectable::after {
+    pointer-events: none; position: absolute; opacity: 0; transition: opacity 0.2s, transform 0.2s;
+    z-index: 5;
+  }
+  /* Marco + esquinas */
+  .selectable::after {
+    content: ""; inset: -6px;
+    border: 1px solid #2de2ff;
+    background-image:
+      linear-gradient(#2de2ff, #2de2ff), linear-gradient(#2de2ff, #2de2ff),
+      linear-gradient(#2de2ff, #2de2ff), linear-gradient(#2de2ff, #2de2ff);
+    background-size: 7px 7px; background-repeat: no-repeat;
+    background-position: -4px -4px, calc(100% + 4px) -4px, -4px calc(100% + 4px), calc(100% + 4px) calc(100% + 4px);
+    transform: scale(1.01);
+  }
+  /* Etiqueta */
+  .selectable::before {
+    content: attr(data-label); left: -6px; top: -27px;
+    background: #2de2ff; color: #04140f; font-family: var(--font-mono); font-size: 10px;
+    padding: 2px 7px; white-space: nowrap; transform: translateY(4px);
+    font-weight: 400; text-transform: none; letter-spacing: 0; line-height: 1.4; text-shadow: none;
+  }
+  .selectable:hover::before, .selectable:hover::after { opacity: 1; transform: none; }
+}
+
+/* ===== Cinta de tecnologías ===== */
+.marquee-track { animation: marquee 38s linear infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ib-box, .ib-text { animation: none; opacity: 1; transform: none; }
+  .marquee-track { animation: none; }
+}
+
+/* ===== Construcción por bloques (flechas que diseñan la página) ===== */
+[data-build].build-pending { opacity: 0; }
+.build-frame {
+  position: fixed; z-index: 55; pointer-events: none;
+  --c: #2de2ff; --ink: #04140f;
+  border: 1px solid var(--c); opacity: 0;
+  background-image:
+    linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c));
+  background-size: 6px 6px; background-repeat: no-repeat;
+  background-position: -3px -3px, calc(100% + 3px) -3px, -3px calc(100% + 3px), calc(100% + 3px) calc(100% + 3px);
+  transition: opacity 0.2s, background-color 0.25s;
+}
+.build-frame.on { opacity: 1; }
+.build-frame.filled { background-color: color-mix(in srgb, var(--c) 9%, transparent); }
+.build-frame.out { opacity: 0; transition: opacity 0.3s; }
+/* Líneas guía que cruzan la pantalla */
+.build-guide { position: absolute; pointer-events: none; opacity: 0.35; }
+.build-guide.gh { left: -100vw; width: 300vw; top: -1px; border-top: 1px dashed var(--c); }
+.build-guide.gv { top: -100vh; height: 300vh; left: -1px; border-left: 1px dashed var(--c); }
+.build-tag {
+  position: absolute; left: -1px; top: -20px; padding: 2px 7px;
+  background: var(--c); color: var(--ink); font-family: var(--font-mono); font-size: 10px; white-space: nowrap;
+}
+
+/* ===== Modo plano (tecla B) ===== */
+.bp-box { position: fixed; pointer-events: none; }
+.bp-block { border: 1px dashed rgba(45, 226, 255, 0.75); background: rgba(45, 226, 255, 0.035); }
+.bp-section { border: 1px solid rgba(255, 184, 77, 0.45); }
+.bp-tag, .bp-size { position: absolute; font-family: var(--font-mono); font-size: 10px; line-height: 1.4; padding: 1px 6px; white-space: nowrap; }
+.bp-block .bp-tag { left: -1px; top: -17px; background: #2de2ff; color: #04140f; }
+.bp-block .bp-size { right: -1px; bottom: -17px; color: #2de2ff; background: rgba(5, 11, 20, 0.85); }
+.bp-section .bp-tag { right: 0; top: 0; background: rgba(255, 184, 77, 0.9); color: #1a1000; }
+.bp-section .bp-size { right: 0; top: 18px; color: rgba(255, 184, 77, 0.9); }
+html.blueprint-on .selectable::before, html.blueprint-on .selectable::after { display: none; }
+
+/* ===== Rendimiento en celular ===== */
+@media (pointer: coarse), (max-width: 767px) {
+  /* El desenfoque de fondo es muy costoso en celulares */
+  .backdrop-blur, .backdrop-blur-sm, .backdrop-blur-md { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  /* Cuadrícula del suelo quieta y menos brillos */
+  .grid-floor { animation: none; }
+  .glitch::before, .glitch::after { display: none; }
+  .neon { text-shadow: 0 0 14px rgba(16, 217, 160, 0.4); }
+  .scanline { animation-duration: 5s; }
+}
+@media (pointer: coarse), (max-width: 767px) {
+  /* Sin desenfoque, el menú necesita un fondo sólido */
+  header[data-build] { background-color: rgba(11, 22, 36, 0.94) !important; }
+}
