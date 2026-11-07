@@ -16,8 +16,8 @@ const cards = [
     Icon: FaUserAstronaut,
     title: { es: '¿Quién soy?', en: 'Who I am' },
     text: {
-      es: 'Hola, soy Sheridan, tengo 22 años y soy de Perú. Estudio Ingeniería de Software con IA y hago mis prácticas como desarrollador de software. Me gusta entender cómo funciona un sistema de punta a punta: la base de datos, el backend, la interfaz y el servidor donde corre.',
-      en: "Hi, I'm Sheridan, I'm 22 and I'm from Perú. I study Software Engineering with AI and I'm doing my internship as a software developer. I like understanding how a system works end to end: the database, the backend, the interface and the server it runs on.",
+      es: 'Hola, soy Sheridan, tengo 22 años y soy de Iquitos. Estudio Ingeniería de Software con IA y hago mis prácticas como desarrollador de software. Me gusta entender cómo funciona un sistema de punta a punta: la base de datos, el backend, la interfaz y el servidor donde corre.',
+      en: "Hi, I'm Sheridan, I'm 22 and I'm from Iquitos, Peru. I study Software Engineering with AI and I'm doing my internship as a software developer. I like understanding how a system works end to end: the database, the backend, the interface and the server it runs on.",
     },
   },
   {
@@ -91,6 +91,13 @@ const skills = [
     { Icon: SiVirtualbox, label: 'VirtualBox', color: '#2F61B4' },
   ]},
 ]
+// Qué flecha coloca cada tecnología (debe existir en TEAM de CursorFlock.jsx)
+const BUILDER = {
+  React: 'React', JavaScript: 'JavaScript', Tailwind: 'Tailwind', HTML: 'Vite', CSS: 'Tailwind', Vite: 'Vite',
+  Laravel: 'Laravel', PHP: 'PHP', Java: 'Java', Python: 'Python', FastAPI: 'FastAPI',
+  PostgreSQL: 'PostgreSQL', MySQL: 'PHP', Oracle: 'Java',
+  Git: 'Git', Linux: 'Linux', Postman: 'FastAPI', VirtualBox: 'Linux',
+}
 // ===================================
 
 // Tarjeta HUD con luz que sigue al mouse
@@ -212,14 +219,17 @@ export default function About() {
             <div className="mt-8 space-y-7">
               {skills.map(({ id, by, group, items }, gi) => (
                 <Reveal key={id} delay={gi * 100}>
-                  <div data-build={`<SkillGroup /> · ${t(group)}`} data-build-by={by}>
-                  <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-muted">
+                  <div>
+                  <p data-build={`<Label /> · ${t(group)}`} data-build-by={by} className="mb-3 font-mono text-[11px] uppercase tracking-widest text-muted">
                     <span className="text-accent">[{String(gi + 1).padStart(2, '0')}]</span> {t(group)}
                   </p>
                   <div className="flex flex-wrap gap-2.5">
                     {items.map(({ Icon, label, color }) => (
                       <div
                         key={label}
+                        data-build={`<Skill /> · ${label}`}
+                        data-build-by={BUILDER[label]}
+                        data-build-kind="pop"
                         className="group flex items-center gap-2 border border-line bg-surface/70 px-3 py-2 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-[0_0_18px_-6px] hover:shadow-accent"
                       >
                         <Icon size={16} color={color} className="transition-transform duration-200 group-hover:scale-125" />

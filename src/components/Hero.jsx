@@ -1,4 +1,4 @@
-import { SiLaravel, SiReact, SiMysql, SiTailwindcss, SiGit, SiPhp, SiJavascript } from 'react-icons/si'
+import { SiLaravel, SiReact, SiMysql, SiTailwindcss, SiGit, SiPhp, SiJavascript, SiPython } from 'react-icons/si'
 import { FaJava, FaDatabase } from 'react-icons/fa'
 import SocialDock from './SocialDock'
 import useTypewriter from '../hooks/useTypewriter'
@@ -17,6 +17,7 @@ const inner = [
   { Icon: SiReact, color: '#61DAFB', label: 'React', by: 'React' },
   { Icon: FaJava, color: '#F89820', label: 'Java', by: 'Java' },
   { Icon: FaDatabase, color: '#F80000', label: 'Oracle', by: 'Java' },
+  { Icon: SiPython, color: '#3776AB', label: 'Python', by: 'Python' },
 ]
 const outer = [
   { Icon: SiPhp, color: '#8993BE', label: 'PHP', by: 'PHP' },
