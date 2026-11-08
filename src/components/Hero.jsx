@@ -1,6 +1,7 @@
 import { SiLaravel, SiReact, SiMysql, SiTailwindcss, SiGit, SiPhp, SiJavascript, SiPython } from 'react-icons/si'
 import { FaJava, FaDatabase } from 'react-icons/fa'
 import SocialDock from './SocialDock'
+import explode from './explode'
 import useTypewriter from '../hooks/useTypewriter'
 import foto from '../assets/foto.jpg' // tu foto (cuadrada, se recorta en círculo)
 import { site } from '../data/site'
@@ -41,9 +42,18 @@ function Orbit({ items, size, speed, reverse, ringBy, ringLabel }) {
         return (
           <div key={label} className="planet-pos absolute left-1/2 top-1/2" style={{ transform: `rotate(${angle}deg) translateY(-${size / 2}px) rotate(-${angle}deg)` }}>
             <div className="planet -translate-x-1/2 -translate-y-1/2" style={{ animationDirection: dir }}>
-              <div title={label} data-build={`<Icon /> · ${label}`} data-build-by={by} data-build-kind="pop" className="clip-hud grid place-items-center size-11 border border-accent/30 bg-surface/90 shadow-[inset_0_0_12px] shadow-accent/20">
+              <button
+                type="button"
+                title={label}
+                aria-label={label}
+                onClick={e => explode(e.currentTarget, color)}
+                data-build={`<Icon /> · ${label}`}
+                data-build-by={by}
+                data-build-kind="pop"
+                className="clip-hud grid cursor-pointer place-items-center size-11 border border-accent/30 bg-surface/90 shadow-[inset_0_0_12px] shadow-accent/20 transition-[border-color,box-shadow] hover:border-accent/70 hover:shadow-accent/50 focus-visible:outline-2 focus-visible:outline-accent"
+              >
                 <Icon size={20} color={color} />
-              </div>
+              </button>
             </div>
           </div>
         )
@@ -137,7 +147,7 @@ export default function Hero() {
         </div>
 
         {/* Visor con órbitas */}
-        <div className="brackets relative mx-auto grid place-items-center size-[320px] sm:size-[460px]">
+        <div className="relative mx-auto grid place-items-center size-[320px] sm:size-[460px]">
           <span data-build="<Label /> · estado" data-build-by="Linux" className="absolute left-0 -top-6 font-mono text-[10px] uppercase tracking-widest text-accent/70">sys.profile // online</span>
           <span data-build="<Label /> · coordenadas" data-build-by="Git" className="absolute right-0 -bottom-6 font-mono text-[10px] uppercase tracking-widest text-accent/70">03°44′S · 73°15′W</span>
           <div className="absolute inset-0 grid place-items-center scale-[0.68] sm:scale-100">
