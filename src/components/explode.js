@@ -62,14 +62,26 @@ export default function explode(el, color = '#10d9a0') {
     { duration: 380, easing: 'ease-in', fill: 'forwards' }
   )
 
-  // Se vuelve a armar: partículas que regresan y el logo aparece con rebote
+  // Se vuelve a armar: las chispas regresan a donde está el logo AHORA.
+  // Como el logo sigue orbitando, la capa de chispas lo sigue cuadro a cuadro.
   setTimeout(() => {
+    const follow = document.createElement('div')
+    follow.style.cssText = 'position:fixed;width:0;height:0;pointer-events:none;z-index:90'
+    document.body.appendChild(follow)
+    let raf
+    const track = () => {
+      const rr = el.getBoundingClientRect()
+      follow.style.left = rr.left + rr.width / 2 + 'px'
+      follow.style.top = rr.top + rr.height / 2 + 'px'
+      raf = requestAnimationFrame(track)
+    }
+    track()
     for (let i = 0; i < 14; i++) {
       const p = document.createElement('span')
       const a = Math.random() * Math.PI * 2
       const d = 50 + Math.random() * 40
       p.style.cssText = `position:absolute;left:-2px;top:-2px;width:4px;height:4px;background:${color};box-shadow:0 0 6px ${color}`
-      layer.appendChild(p)
+      follow.appendChild(p)
       p.animate(
         [
           { transform: `translate(${Math.cos(a) * d}px,${Math.sin(a) * d}px)`, opacity: 0 },
@@ -79,6 +91,7 @@ export default function explode(el, color = '#10d9a0') {
         { duration: 450, easing: 'cubic-bezier(.5,0,.75,0)', delay: Math.random() * 120, fill: 'forwards' }
       )
     }
+    setTimeout(() => { cancelAnimationFrame(raf); follow.remove() }, 1000)
   }, 1250)
 
   setTimeout(() => {
