@@ -1,4 +1,3 @@
-// ===== Tus datos: se usan en todo el portafolio =====
 export const site = {
   name: 'Sheridan Manuyama',
   logo: 'Sheridan Developer',                 
